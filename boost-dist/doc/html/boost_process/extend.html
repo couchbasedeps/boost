@@ -1,14 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Extensions</title>
 <link rel="stylesheet" href="../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
-<link rel="up" href="../process.html" title="Chapter&#160;29.&#160;Boost.Process">
+<link rel="up" href="../process.html" title="Chapter 28. Boost.Process">
 <link rel="prev" href="design.html" title="Design Rationale">
 <link rel="next" href="faq.html" title="Frequently Asked Questions">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -45,9 +46,9 @@
     </p>
 <p>
       What this means is, that a custom initializer can be implemented, a reference
-      to which can be passed to one of the launching functions. If a class inherits
+      which can be passed to one of the launching functions. If a class inherits
       <code class="computeroutput"><a class="link" href="../boost/process/extend/handler.html" title="Struct handler">boost::process::extend::handler</a></code>
-      it will be regarded as a initializer and thus directly put into the sequence
+      it will be regarded as an initializer and thus directly put into the sequence
       the executor gets passed.
     </p>
 <div class="section">
@@ -56,7 +57,7 @@
 </h3></div></div></div>
 <p>
         The executor calls different handlers of the initializers during the process
-        launch. The basic structure is consists of three functions, as given below:
+        launch. The basic structure consists of three functions, as given below:
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
@@ -104,12 +105,12 @@
 <pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">process</span><span class="special">;</span>
 <span class="keyword">namespace</span> <span class="identifier">ex</span> <span class="special">=</span> <span class="identifier">bp</span><span class="special">::</span><span class="identifier">extend</span><span class="special">;</span>
 
-<code class="computeroutput"><a class="link" href="../boost/process/child.html" title="Class child">child</a></code> <span class="identifier">c</span><span class="special">(</span><span class="string">"foo"</span><span class="special">,</span> <span class="identifier">ex</span><span class="special">::</span><code class="computeroutput"><a class="link" href="../boost/process/extend/on_success.html" title="Global on_success">ex::on_success</a></code><span class="special">=[](</span><span class="keyword">auto</span> <span class="special">&amp;</span> <span class="identifier">exec</span><span class="special">)</span> <span class="special">{</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"hello world"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;});</span>
+<code class="computeroutput"><a class="link" href="../boost/process/child.html" title="Class child">child</a></code> <span class="identifier">c</span><span class="special">(</span><span class="string">"foo"</span><span class="special">,</span> <code class="computeroutput"><a class="link" href="../boost/process/extend/on_success.html" title="Global on_success">ex::on_success</a></code><span class="special">=[](</span><span class="keyword">auto</span> <span class="special">&amp;</span> <span class="identifier">exec</span><span class="special">)</span> <span class="special">{</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"hello world"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;});</span>
 </pre>
 <p>
       </p>
 <p>
-        Considering that lambda can also capture values, data can easily be shared
+        Considering that lambdas can also capture values, data can easily be shared
         between handlers.
       </p>
 <p>
@@ -173,7 +174,7 @@
         </p></td></tr>
 </table></div>
 <p>
-        Every handler not implemented dafaults to <code class="computeroutput"><a class="link" href="../boost/process/extend/handler.html" title="Struct handler">handler</a></code>,
+        Every handler not implemented defaults to <code class="computeroutput"><a class="link" href="../boost/process/extend/handler.html" title="Struct handler">handler</a></code>,
         where an empty handler is defined for each event.
       </p>
 </div>
@@ -184,17 +185,17 @@
 <p>
         Since <code class="computeroutput"><span class="identifier">boost</span><span class="special">.</span><span class="identifier">process</span></code> provides an interface for <a href="http://www.boost.org/doc/libs/release/libs/asio/" target="_top">boost.asio</a>,
         this functionality is also available for extensions. If the class needs the
-        <a href="http://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/io_service.html" target="_top">boost::asio::io_service</a>
+        <a href="http://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/io_context.html" target="_top">boost::asio::io_context</a>
         for some reason, the following code will do that.
       </p>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">async_foo</span> <span class="special">:</span> <code class="computeroutput"><a class="link" href="../boost/process/extend/handler.html" title="Struct handler">handler</a></code><span class="special">,</span> <code class="computeroutput"><a class="link" href="../boost/process/extend/require_io_service.html" title="Struct require_io_service">ex::require_boost::asio::io_service</a></code>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">async_foo</span> <span class="special">:</span> <code class="computeroutput"><a class="link" href="../boost/process/extend/handler.html" title="Struct handler">handler</a></code><span class="special">,</span> <code class="computeroutput"><a class="link" href="../boost/process/extend/require_io_context.html" title="Struct require_io_context">ex::require_io_context</a></code>
 <span class="special">{</span>
-    <span class="identifier">tempalte</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Executor</span><span class="special">&gt;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Executor</span><span class="special">&gt;</span>
     <span class="keyword">void</span> <span class="identifier">on_setup</span><span class="special">(</span><span class="identifier">Executor</span> <span class="special">&amp;</span> <span class="identifier">exec</span><span class="special">)</span>
     <span class="special">{</span>
-        <span class="identifier">__io_service__</span> <span class="special">&amp;</span> <span class="identifier">ios</span> <span class="special">=</span> <code class="computeroutput"><a class="link" href="../boost/process/extend/get_io_service.html" title="Function template get_io_service">ex::get_boost::asio::io_service</a></code><span class="special">(</span><span class="identifier">exec</span><span class="special">.</span><span class="identifier">seq</span><span class="special">);</span> <span class="comment">//gives us a reference and a compiler error if not present.</span>
+        <a href="http://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/io_context.html" target="_top">boost::asio::io_context</a> <span class="special">&amp;</span> <span class="identifier">ios</span> <span class="special">=</span> <code class="computeroutput"><a class="link" href="../boost/process/extend/get_io_context.html" title="Function template get_io_context">ex::get_io_context</a></code><span class="special">(</span><span class="identifier">exec</span><span class="special">.</span><span class="identifier">seq</span><span class="special">);</span> <span class="comment">//gives us a reference and a compiler error if not present.</span>
         <span class="comment">//do something with ios</span>
     <span class="special">}</span>
 <span class="special">};</span>
@@ -207,7 +208,7 @@
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-          Inheriting <code class="computeroutput">require_boost::asio::io_service</code>
+          Inheriting <code class="computeroutput">require_io_context</code>
           is necessary, so <code class="computeroutput"><a class="link" href="../boost/process/system.html" title="Function template system">system</a></code>
           provides one.
         </p></td></tr>
@@ -223,7 +224,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
           <code class="computeroutput">async_handler</code>
-          implies <code class="computeroutput">require_boost::asio::io_service</code>
+          implies <code class="computeroutput">require_io_context</code>
           .
         </p></td></tr>
 </table></div>
@@ -234,8 +235,8 @@
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Executor</span><span class="special">&gt;</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">error_code</span><span class="special">&amp;)&gt;</span> <span class="identifier">on_exit_handler</span><span class="special">(</span><span class="identifier">Executor</span> <span class="special">&amp;</span> <span class="identifier">exec</span><span class="special">)</span>
     <span class="special">{</span>
-        <span class="keyword">auto</span> <span class="identifier">handler</span> <span class="special">=</span> <span class="keyword">this</span><span class="special">-&gt;</span><span class="identifier">handler</span><span class="special">;</span>
-        <span class="keyword">return</span> <span class="special">[</span><span class="identifier">handler</span><span class="special">](</span><span class="keyword">int</span> <span class="identifier">exit_code</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> <span class="identifier">ec</span><span class="special">)</span>
+        <span class="keyword">auto</span> <span class="identifier">handler_</span> <span class="special">=</span> <span class="keyword">this</span><span class="special">-&gt;</span><span class="identifier">handler</span><span class="special">;</span>
+        <span class="keyword">return</span> <span class="special">[</span><span class="identifier">handler_</span><span class="special">](</span><span class="keyword">int</span> <span class="identifier">exit_code</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> <span class="identifier">ec</span><span class="special">)</span>
                <span class="special">{</span>
                    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"hello world, I exited with "</span> <span class="special">&lt;&lt;</span> <span class="identifier">exit_code</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
                <span class="special">};</span>
@@ -256,6 +257,18 @@
           is inherited.
         </p></td></tr>
 </table></div>
+<div class="caution"><table border="0" summary="Caution">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../doc/src/images/caution.png"></td>
+<th align="left">Caution</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          <code class="computeroutput"><span class="identifier">on_exit_handler</span></code> uses <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">asio</span><span class="special">::</span><span class="identifier">signal_set</span></code> to listen for SIGCHLD on posix.
+          The application must not also register a signal handler for SIGCHLD using
+          functions such as <code class="computeroutput"><span class="identifier">signal</span><span class="special">()</span></code> or <code class="computeroutput"><span class="identifier">sigaction</span><span class="special">()</span></code> (but using <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">asio</span><span class="special">::</span><span class="identifier">signal_set</span></code>
+          is fine).
+        </p></td></tr>
+</table></div>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -263,11 +276,11 @@
 </h3></div></div></div>
 <p>
         If an error occurs in the initializers it shall be told to the executor and
-        not handles directly. This is because the behaviour can be changed through
-        arguments passed to the launching function. Hence the the executor has the
-        function <code class="computeroutput"><span class="identifier">set_error</span></code>, which
-        takes an <a href="http://en.cppreference.com/w/cpp/error/error_code" target="_top">std::error_code</a>
-        and a string. Depending on the cofiguration of the executor, this may either
+        not handled directly. This is because the behaviour can be changed through
+        arguments passed to the launching function. Hence the executor has the function
+        <code class="computeroutput"><span class="identifier">set_error</span></code>, which takes an
+        <a href="http://en.cppreference.com/w/cpp/error/error_code" target="_top">std::error_code</a>
+        and a string. Depending on the configuration of the executor, this may either
         throw, set an internal <code class="computeroutput"><span class="identifier">error_code</span></code>,
         or do nothing.
       </p>
@@ -345,9 +358,9 @@
 <p>
       </p>
 <p>
-        So given our example, the definitions with the non-native exectur are still
+        So given our example, the definitions with the non-native executor are still
         a template so that they will not be evaluated if not used. Hence this provides
-        a way to implement systems-specific code without using the preprocessor.
+        a way to implement system-specific code without using the preprocessor.
       </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -364,15 +377,12 @@
       </p>
 </div>
 </div>
-<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2012 Julio M. Merino Vidal, Ilya Sokolov,
-      Felipe Tanus, Jeff Flinn, Boris Schaeling<br>Copyright &#169; 2016 Klemens D. Morgenstern<p>
+<div class="copyright-footer">Copyright © 2006-2012 Julio M. Merino Vidal, Ilya Sokolov,
+      Felipe Tanus, Jeff Flinn, Boris Schaeling<br>Copyright © 2016 Klemens D. Morgenstern<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       </p>
-</div></td>
-</tr></table>
+</div>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="design.html"><img src="../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../process.html"><img src="../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="faq.html"><img src="../../../doc/src/images/next.png" alt="Next"></a>

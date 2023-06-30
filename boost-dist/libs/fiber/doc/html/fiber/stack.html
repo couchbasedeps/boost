@@ -1,13 +1,14 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Stack allocation</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Fiber">
-<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Fiber">
+<link rel="home" href="../index.html" title="Chapter 1. Fiber">
+<link rel="up" href="../index.html" title="Chapter 1. Fiber">
 <link rel="prev" href="scheduling.html" title="Scheduling">
 <link rel="next" href="stack/valgrind.html" title="Support for valgrind">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,12 +27,14 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="fiber.stack"></a><a name="stack"></a><a class="link" href="stack.html" title="Stack allocation">Stack allocation</a>
 </h2></div></div></div>
-<div class="toc"><dl class="toc"><dt><span class="section"><a href="stack/valgrind.html">Support for valgrind</a></span></dt></dl></div>
+<div class="toc"><dl class="toc">
+<dt><span class="section"><a href="stack/valgrind.html">Support for valgrind</a></span></dt>
+<dt><span class="section"><a href="stack/sanitizers.html">Support for sanitizers</a></span></dt>
+</dl></div>
 <p>
-      A <a class="link" href="fiber_mgmt/fiber.html#class_fiber"><code class="computeroutput">fiber</code></a> uses internally an <a href="http://www.boost.org/doc/libs/release/libs/context/doc/html/context/ecv2.html" target="_top"><span class="emphasis"><em>execution_context</em></span></a>
-      which manages a set of registers and a stack. The memory used by the stack
-      is allocated/deallocated via a <span class="emphasis"><em>stack_allocator</em></span> which is
-      required to model a <a class="link" href="stack.html#stack_allocator_concept"><span class="emphasis"><em>stack-allocator
+      A <a class="link" href="fiber_mgmt/fiber.html#class_fiber"><code class="computeroutput">fiber</code></a> uses internally an __econtext__ which manages a set of registers
+      and a stack. The memory used by the stack is allocated/deallocated via a <span class="emphasis"><em>stack_allocator</em></span>
+      which is required to model a <a class="link" href="stack.html#stack_allocator_concept"><span class="emphasis"><em>stack-allocator
       concept</em></span></a>.
     </p>
 <p>
@@ -152,7 +155,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
         The memory for the stack is not required to be aligned; alignment takes place
-        inside <a href="http://www.boost.org/doc/libs/release/libs/context/doc/html/context/ecv2.html" target="_top"><span class="emphasis"><em>execution_context</em></span></a>.
+        inside __econtext__.
       </p></td></tr>
 </table></div>
 <p>
@@ -338,7 +341,7 @@
             determines the number of stacks to request from the system the first
             time that <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
             needs to allocate system memory. The third argument <code class="computeroutput"><span class="identifier">max_size</span></code>
-            controls how much memory might be allocated for stacks &#8212; a value of zero
+            controls how much memory might be allocated for stacks — a value of zero
             means no upper limit.
           </p></dd>
 </dl>
@@ -500,7 +503,7 @@
 </dl>
 </div>
 <p>
-      </p>
+      <a name="segmented"></a></p>
 <h5>
 <a name="class_segmented_stack_bridgehead"></a>
   <span class="phrase"><a name="class_segmented_stack"></a></span>
@@ -528,8 +531,17 @@
         from version <span class="bold"><strong>3.4</strong></span> onwards. In order to use
         a <a class="link" href="stack.html#class_segmented_stack"><code class="computeroutput">segmented_stack</code></a> <span class="bold"><strong>Boost.Fiber</strong></span>
         must be built with property <code class="computeroutput"><span class="identifier">segmented</span><span class="special">-</span><span class="identifier">stacks</span></code>,
-        e.g. <span class="bold"><strong>toolset=gcc segmented-stacks=on</strong></span> at
-        b2/bjam command line.
+        e.g. <span class="bold"><strong>toolset=gcc segmented-stacks=on</strong></span> and
+        applying BOOST_USE_SEGMENTED_STACKS at b2/bjam command line.
+      </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        Segmented stacks can only be used with callcc() using property <code class="computeroutput"><span class="identifier">context</span><span class="special">-</span><span class="identifier">impl</span><span class="special">=</span><span class="identifier">ucontext</span></code>.
       </p></td></tr>
 </table></div>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fiber</span><span class="special">/</span><span class="identifier">segmented_stack</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -616,14 +628,11 @@
       </p></td></tr>
 </table></div>
 </div>
-<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Oliver Kowalke<p>
+<div class="copyright-footer">Copyright © 2013 Oliver Kowalke<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
-</div></td>
-</tr></table>
+</div>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="scheduling.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="stack/valgrind.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>

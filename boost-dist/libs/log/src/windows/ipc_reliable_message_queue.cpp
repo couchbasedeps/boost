@@ -28,7 +28,8 @@
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>
-#include <boost/atomic/atomic.hpp>
+#include <boost/memory_order.hpp>
+#include <boost/atomic/ipc_atomic.hpp>
 #include <boost/atomic/capabilities.hpp>
 #include <boost/log/exceptions.hpp>
 #include <boost/log/utility/ipc/reliable_message_queue.hpp>
@@ -37,7 +38,7 @@
 #include <boost/exception/info.hpp>
 #include <boost/exception/enable_error_info.hpp>
 #include <boost/align/align_up.hpp>
-#include <boost/detail/winapi/thread.hpp> // SwitchToThread
+#include <boost/winapi/thread.hpp> // SwitchToThread
 #include "windows/ipc_sync_wrappers.hpp"
 #include "windows/mapped_shared_memory.hpp"
 #include "windows/utf_code_conversion.hpp"
@@ -45,11 +46,6 @@
 #include "bit_tools.hpp"
 #include <windows.h>
 #include <boost/log/detail/header.hpp>
-
-#if BOOST_ATOMIC_INT32_LOCK_FREE != 2
-// 32-bit atomic ops are required to be able to place atomic<uint32_t> in the process-shared memory
-#error Boost.Log: Native 32-bit atomic operations are required but not supported by Boost.Atomic on the target platform
-#endif
 
 //! A suffix used in names of interprocess objects created by the queue.
 //! Used as a protection against clashing with user-supplied names of interprocess queues and also to resolve conflicts between queues of different types.
@@ -100,7 +96,7 @@ private:
         //! Padding to protect against alignment changes in Boost.Atomic. Don't use BOOST_ALIGNMENT to ensure portability.
         unsigned char m_padding[BOOST_LOG_CPU_CACHE_LINE_SIZE - sizeof(uint32_t)];
         //! A flag indicating that the queue is constructed (i.e. the queue is constructed when the value is not 0).
-        boost::atomic< uint32_t > m_initialized;
+        boost::ipc_atomic< uint32_t > m_initialized;
         //! Number of allocation blocks in the queue.
         const uint32_t m_capacity;
         //! Size of an allocation block, in bytes.
@@ -125,7 +121,7 @@ private:
             m_get_pos(0u)
         {
             // Must be initialized last. m_initialized is zero-initialized initially.
-            m_initialized.fetch_add(1u, boost::memory_order_release);
+            m_initialized.opaque_add(1u, boost::memory_order_release);
         }
 
         //! Returns the header structure ABI tag
@@ -216,6 +212,7 @@ public:
         m_block_size_log2(0u),
         m_name(name)
     {
+        BOOST_ASSERT(block_size >= block_header::get_header_overhead());
         const std::wstring wname = boost::log::aux::utf8_to_utf16(name.c_str());
         const std::size_t shmem_size = estimate_region_size(capacity, block_size);
         m_shared_memory.create(wname.c_str(), shmem_size, perms);
@@ -239,6 +236,7 @@ public:
         m_block_size_log2(0u),
         m_name(name)
     {
+        BOOST_ASSERT(block_size >= block_header::get_header_overhead());
         const std::wstring wname = boost::log::aux::utf8_to_utf16(name.c_str());
         const std::size_t shmem_size = estimate_region_size(capacity, block_size);
         const bool created = m_shared_memory.create_or_open(wname.c_str(), shmem_size, perms);
@@ -387,12 +385,12 @@ public:
 
     void stop_local()
     {
-        BOOST_VERIFY(boost::detail::winapi::SetEvent(m_stop.get()) != 0);
+        BOOST_VERIFY(boost::winapi::SetEvent(m_stop.get()) != 0);
     }
 
     void reset_local()
     {
-        BOOST_VERIFY(boost::detail::winapi::ResetEvent(m_stop.get()) != 0);
+        BOOST_VERIFY(boost::winapi::ResetEvent(m_stop.get()) != 0);
     }
 
     void clear()
@@ -416,15 +414,15 @@ private:
     void create_stop_event()
     {
 #if BOOST_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN6
-        boost::detail::winapi::HANDLE_ h = boost::detail::winapi::CreateEventExW
+        boost::winapi::HANDLE_ h = boost::winapi::CreateEventExW
         (
             NULL, // permissions
             NULL, // name
-            boost::detail::winapi::CREATE_EVENT_MANUAL_RESET_,
-            boost::detail::winapi::SYNCHRONIZE_ | boost::detail::winapi::EVENT_MODIFY_STATE_
+            boost::winapi::CREATE_EVENT_MANUAL_RESET_,
+            boost::winapi::SYNCHRONIZE_ | boost::winapi::EVENT_MODIFY_STATE_
         );
 #else
-        boost::detail::winapi::HANDLE_ h = boost::detail::winapi::CreateEventW
+        boost::winapi::HANDLE_ h = boost::winapi::CreateEventW
         (
             NULL, // permissions
             true, // manual reset
@@ -434,7 +432,7 @@ private:
 #endif
         if (BOOST_UNLIKELY(h == NULL))
         {
-            boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            boost::winapi::DWORD_ err = boost::winapi::GetLastError();
             BOOST_LOG_THROW_DESCR_PARAMS(boost::log::system_error, "Failed to create an stop event object", (err));
         }
 
@@ -480,7 +478,7 @@ private:
             }
             else
             {
-                boost::detail::winapi::SwitchToThread();
+                boost::winapi::SwitchToThread();
             }
         }
 
@@ -563,6 +561,7 @@ private:
         const uint32_t capacity = hdr->m_capacity;
         const size_type block_size = hdr->m_block_size;
         uint32_t pos = hdr->m_put_pos;
+        BOOST_ASSERT(pos < capacity);
 
         block_header* block = hdr->get_block(pos);
         block->m_size = message_size;
@@ -597,6 +596,7 @@ private:
         const uint32_t capacity = hdr->m_capacity;
         const size_type block_size = hdr->m_block_size;
         uint32_t pos = hdr->m_get_pos;
+        BOOST_ASSERT(pos < capacity);
 
         block_header* block = hdr->get_block(pos);
         size_type message_size = block->m_size;

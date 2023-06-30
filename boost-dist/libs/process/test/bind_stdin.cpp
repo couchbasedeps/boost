@@ -19,7 +19,8 @@
 
 #include <system_error>
 #include <boost/system/error_code.hpp>
-#include <boost/filesystem.hpp>
+#include <boost/process/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 #include <boost/asio.hpp>
 #include <string>
@@ -29,9 +30,10 @@
 
 #include <boost/config.hpp>
 
+BOOST_AUTO_TEST_SUITE( bind_stdin );
 
 #if defined(BOOST_WINDOWS_API)
-#   include <Windows.h>
+#   include <windows.h>
 typedef boost::asio::windows::stream_handle pipe_end;
 #elif defined(BOOST_POSIX_API)
 #   include <sys/wait.h>
@@ -40,7 +42,7 @@ typedef boost::asio::posix::stream_descriptor pipe_end;
 #endif
 
 
-namespace fs = boost::filesystem;
+namespace fs = boost::process::filesystem;
 namespace bp = boost::process;
 
 BOOST_AUTO_TEST_CASE(sync_io, *boost::unit_test::timeout(10))
@@ -111,9 +113,9 @@ BOOST_AUTO_TEST_CASE(async_io, *boost::unit_test::timeout(2))
     std::cout << "async_io" << std::endl;
     using boost::unit_test::framework::master_test_suite;
 
-    boost::asio::io_service io_service;
+    boost::asio::io_context io_context;
 
-    bp::async_pipe p1(io_service);
+    bp::async_pipe p1(io_context);
     bp::ipstream is;
 
     boost::asio::streambuf sb;
@@ -135,7 +137,7 @@ BOOST_AUTO_TEST_CASE(async_io, *boost::unit_test::timeout(2))
     boost::asio::async_write(p1, sb,
         write_handler(is));
 
-    io_service.run();
+    io_context.run();
 
     c.wait();
 }
@@ -176,7 +178,7 @@ BOOST_AUTO_TEST_CASE(file_io, *boost::unit_test::timeout(2))
     bp::ipstream is;
 
     {
-        boost::filesystem::ofstream fs(pth);
+        boost::process::filesystem::ofstream fs(pth);
         fs << 321 << std::endl;
         fs << 1.2345 << std::endl;
         fs << "some_string" << std::endl;
@@ -204,7 +206,7 @@ BOOST_AUTO_TEST_CASE(file_io, *boost::unit_test::timeout(2))
     BOOST_CHECK_EQUAL(s, "abcsome_string");
 
     c.wait();
-    boost::filesystem::remove(pth);
+    boost::process::filesystem::remove(pth);
 }
 
 BOOST_AUTO_TEST_CASE(file_io_C, *boost::unit_test::timeout(2))
@@ -219,7 +221,7 @@ BOOST_AUTO_TEST_CASE(file_io_C, *boost::unit_test::timeout(2))
     bp::ipstream is;
 
     {
-        boost::filesystem::ofstream fs(pth);
+        boost::process::filesystem::ofstream fs(pth);
         fs << 321 << std::endl;
         fs << 1.2345 << std::endl;
         fs << "some_string" << std::endl;
@@ -253,5 +255,7 @@ BOOST_AUTO_TEST_CASE(file_io_C, *boost::unit_test::timeout(2))
     BOOST_CHECK_EQUAL(s, "abcsome_string");
 
     c.wait();
-    boost::filesystem::remove(pth);
+    boost::process::filesystem::remove(pth);
 }
+
+BOOST_AUTO_TEST_SUITE_END();

@@ -1,14 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Scoped Threads</title>
 <link rel="stylesheet" href="../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
-<link rel="up" href="../thread.html" title="Chapter&#160;38.&#160;Thread 4.7.2">
+<link rel="up" href="../thread.html" title="Chapter 38. Thread 4.8.0">
 <link rel="prev" href="thread_management.html" title="Thread Management">
 <link rel="next" href="synchronization.html" title="Synchronization">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -168,8 +169,7 @@
 <a name="thread.ScopedThreads.strict_scoped_thread"></a><a class="link" href="ScopedThreads.html#thread.ScopedThreads.strict_scoped_thread" title="Class strict_scoped_thread">Class <code class="computeroutput"><span class="identifier">strict_scoped_thread</span></code></a>
 </h3></div></div></div>
 <div class="toc"><dl class="toc">
-<dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.strict_scoped_thread.default_constructor">Constructor
-        from a <a class="link" href="thread_management.html#thread.thread_management.thread" title="Class thread"><code class="computeroutput"><span class="identifier">thread</span></code></a></a></span></dt>
+<dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.strict_scoped_thread.default_constructor">Constructor from a <code class="computeroutput"><span class="identifier">thread</span></code></a></span></dt>
 <dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.strict_scoped_thread.call_constructor">Move
         Constructor from a Callable</a></span></dt>
 <dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.strict_scoped_thread.destructor">Destructor</a></span></dt>
@@ -216,8 +216,7 @@
 </pre>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="thread.ScopedThreads.strict_scoped_thread.default_constructor"></a><a class="link" href="ScopedThreads.html#thread.ScopedThreads.strict_scoped_thread.default_constructor" title="Constructor from a thread">Constructor
-        from a <code class="computeroutput"><span class="identifier">thread</span></code></a>
+<a name="thread.ScopedThreads.strict_scoped_thread.default_constructor"></a>Constructor from a <a class="link" href="thread_management.html#thread.thread_management.thread" title="Class thread"><code class="computeroutput"><span class="identifier">thread</span></code></a>
 </h4></div></div></div>
 <pre class="programlisting"><span class="keyword">explicit</span> <span class="identifier">strict_scoped_thread</span><span class="special">(</span><span class="identifier">Thread</span><span class="special">&amp;&amp;</span> <span class="identifier">t</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
 </pre>
@@ -295,8 +294,7 @@
         Constructor</a></span></dt>
 <dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.scoped_thread.move_assignment">Move
         assignment operator</a></span></dt>
-<dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.scoped_thread.thread_constructor">Move
-        Constructor from a <a class="link" href="thread_management.html#thread.thread_management.thread" title="Class thread"><code class="computeroutput"><span class="identifier">thread</span></code></a></a></span></dt>
+<dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.scoped_thread.thread_constructor">Move Constructor from a <code class="computeroutput"><span class="identifier">thread</span></code></a></span></dt>
 <dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.scoped_thread.call_constructor">Move
         Constructor from a Callable</a></span></dt>
 <dt><span class="section"><a href="ScopedThreads.html#thread.ScopedThreads.scoped_thread.destructor">Destructor</a></span></dt>
@@ -492,8 +490,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="thread.ScopedThreads.scoped_thread.thread_constructor"></a><a class="link" href="ScopedThreads.html#thread.ScopedThreads.scoped_thread.thread_constructor" title="Move Constructor from a thread">Move
-        Constructor from a <code class="computeroutput"><span class="identifier">thread</span></code></a>
+<a name="thread.ScopedThreads.scoped_thread.thread_constructor"></a>Move Constructor from a <a class="link" href="thread_management.html#thread.thread_management.thread" title="Class thread"><code class="computeroutput"><span class="identifier">thread</span></code></a>
 </h4></div></div></div>
 <pre class="programlisting"><span class="identifier">scoped_thread</span><span class="special">(</span><span class="identifier">thread</span><span class="special">&amp;&amp;</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
@@ -781,14 +778,11 @@
 </div>
 </div>
 </div>
-<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2007 -11 Anthony Williams<br>Copyright &#169; 2011 -16 Vicente J. Botet Escriba<p>
+<div class="copyright-footer">Copyright © 2007 -11 Anthony Williams<br>Copyright © 2011 -17 Vicente J. Botet Escriba<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
-</div></td>
-</tr></table>
+</div>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="thread_management.html"><img src="../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../thread.html"><img src="../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="synchronization.html"><img src="../../../doc/src/images/next.png" alt="Next"></a>

@@ -20,13 +20,13 @@
 #include <boost/process/async.hpp>
 #include <system_error>
 
-#include <boost/filesystem.hpp>
+#include <boost/process/filesystem.hpp>
 
 #include <string>
 #include <istream>
 #include <cstdlib>
 #if defined(BOOST_WINDOWS_API)
-#   include <Windows.h>
+#   include <windows.h>
 typedef boost::asio::windows::stream_handle pipe_end;
 #elif defined(BOOST_POSIX_API)
 #   include <sys/wait.h>
@@ -34,14 +34,14 @@ typedef boost::asio::windows::stream_handle pipe_end;
 typedef boost::asio::posix::stream_descriptor pipe_end;
 #endif
 
-namespace fs = boost::filesystem;
+namespace fs = boost::process::filesystem;
 namespace bp = boost::process;
 
 int main()
 {
     std::error_code ec;
 
-    boost::asio::io_service ios;
+    boost::asio::io_context ios;
 
     bp::spawn(
         "dummy",

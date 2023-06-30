@@ -60,9 +60,9 @@ namespace boost {
 The library allows full redirection of streams to files as shown below.
 
 \code{.cpp}
-boost::filesystem::path log    = "my_log_file.txt";
-boost::filesystem::path input  = "input.txt";
-boost::filesystem::path output = "output.txt";
+boost::process::filesystem::path log    = "my_log_file.txt";
+boost::process::filesystem::path input  = "input.txt";
+boost::process::filesystem::path output = "output.txt";
 system("my_prog", std_out>output, std_in<input, std_err>log);
 \endcode
 
@@ -91,14 +91,14 @@ child c2("c++filt", std_in<p);
 Utilizing `boost.asio` asynchronous I/O is provided.
 
 \code
-boost::asio::io_service ios;
+boost::asio::io_context ios;
 std::future<std::string> output;
 system("ls", std_out > output, ios);
 
 auto res = fut.get();
 \endcode
 
-\note `boost/process/asnyc.hpp` must also be included for this to work.
+\note `boost/process/async.hpp` must also be included for this to work.
 
 \par Closing
 
@@ -136,13 +136,13 @@ template<typename T> using is_mutable_buffer =
         >;
 
 
-struct null_t  {constexpr null_t() {}};
+struct null_t  {constexpr null_t() = default;};
 struct close_t;
 
 template<class>
 struct std_in_
 {
-    constexpr std_in_() {}
+    constexpr std_in_() = default;
 
     api::close_in close() const {return api::close_in(); }
     api::close_in operator=(const close_t &) const {return api::close_in();}
@@ -152,13 +152,13 @@ struct std_in_
     api::null_in operator=(const null_t &) const {return api::null_in();}
     api::null_in operator<(const null_t &) const {return api::null_in();}
 
-    api::file_in operator=(const boost::filesystem::path &p) const {return p;}
+    api::file_in operator=(const boost::process::filesystem::path &p) const {return p;}
     api::file_in operator=(const std::string & p)            const {return p;}
     api::file_in operator=(const std::wstring &p)            const {return p;}
     api::file_in operator=(const char * p)                   const {return p;}
     api::file_in operator=(const wchar_t * p)                const {return p;}
 
-    api::file_in operator<(const boost::filesystem::path &p) const {return p;}
+    api::file_in operator<(const boost::process::filesystem::path &p) const {return p;}
     api::file_in operator<(const std::string &p)             const {return p;}
     api::file_in operator<(const std::wstring &p)            const {return p;}
     api::file_in operator<(const char*p)                     const {return p;}
@@ -199,7 +199,7 @@ struct std_in_
 template<int p1, int p2 = -1>
 struct std_out_
 {
-    constexpr std_out_() {}
+    constexpr std_out_() = default;
 
     api::close_out<p1,p2> close() const {return api::close_out<p1,p2>(); }
     api::close_out<p1,p2> operator=(const close_t &) const {return api::close_out<p1,p2>();}
@@ -209,13 +209,13 @@ struct std_out_
     api::null_out<p1,p2> operator=(const null_t &) const {return api::null_out<p1,p2>();}
     api::null_out<p1,p2> operator>(const null_t &) const {return api::null_out<p1,p2>();}
 
-    api::file_out<p1,p2> operator=(const boost::filesystem::path &p) const {return api::file_out<p1,p2>(p);}
+    api::file_out<p1,p2> operator=(const boost::process::filesystem::path &p) const {return api::file_out<p1,p2>(p);}
     api::file_out<p1,p2> operator=(const std::string &p)             const {return api::file_out<p1,p2>(p);}
     api::file_out<p1,p2> operator=(const std::wstring &p)            const {return api::file_out<p1,p2>(p);}
     api::file_out<p1,p2> operator=(const char * p)                   const {return api::file_out<p1,p2>(p);}
     api::file_out<p1,p2> operator=(const wchar_t * p)                const {return api::file_out<p1,p2>(p);}
 
-    api::file_out<p1,p2> operator>(const boost::filesystem::path &p) const {return api::file_out<p1,p2>(p);}
+    api::file_out<p1,p2> operator>(const boost::process::filesystem::path &p) const {return api::file_out<p1,p2>(p);}
     api::file_out<p1,p2> operator>(const std::string &p)             const {return api::file_out<p1,p2>(p);}
     api::file_out<p1,p2> operator>(const std::wstring &p)            const {return api::file_out<p1,p2>(p);}
     api::file_out<p1,p2> operator>(const char * p)                   const {return api::file_out<p1,p2>(p);}
@@ -260,7 +260,7 @@ struct std_out_
 
 struct close_t
 {
-    constexpr close_t() {}
+    constexpr close_t() = default;
     template<int T, int U>
     api::close_out<T,U> operator()(std_out_<T,U>) {return api::close_out<T,U>();}
 };
@@ -282,7 +282,7 @@ This property allows to set the input stream for the child process.
 
 The file I/O simple redirects the stream to a file, for which the possible types are
 
- - `boost::filesystem::path`
+ - `boost::process::filesystem::path`
  - `std::basic_string<char_type>`
  - `const char_type*`
  - `FILE*`
@@ -371,7 +371,7 @@ std_err = buffer;
 so you can wait for the input to be completed. It looks like this:
 \code{.cpp}
 std::future<void> fut;
-boost::asio::io_service ios;
+boost::asio::io_context ios;
 std::string data;
 child c("prog", std_in < buffer(data) >  fut, ios);
 fut.get();
@@ -380,7 +380,7 @@ fut.get();
 
 \note `boost::asio::buffer` is also available in the `boost::process` namespace.
 
-\warning This feature requires `boost/process/async.hpp` to be included and a reference to `boost::asio::io_service` to be passed to the launching function.
+\warning This feature requires `boost/process/async.hpp` to be included and a reference to `boost::asio::io_context` to be passed to the launching function.
 
 
 \subsection stdin_close Close
@@ -424,7 +424,7 @@ This property allows to set the output stream for the child process.
 
 The file I/O simple redirects the stream to a file, for which the possible types are
 
- - `boost::filesystem::path`
+ - `boost::process::filesystem::path`
  - `std::basic_string<char_type>`
  - `const char_type*`
  - `FILE*`
@@ -510,7 +510,7 @@ std_err = buffer;
 
 \note `boost::asio::buffer` is also available in the `boost::process` namespace.
 
-\warning This feature requires `boost/process/async.hpp` to be included and a reference to `boost::asio::io_service` to be passed to the launching function.
+\warning This feature requires `boost/process/async.hpp` to be included and a reference to `boost::asio::io_context` to be passed to the launching function.
 
 
 \subsection stdout_close Close

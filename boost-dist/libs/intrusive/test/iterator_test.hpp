@@ -120,8 +120,8 @@ void test_iterator_compatible(C &c)
    test_iterator_operations(get_reverse_iterator<C>::begin(c), get_reverse_iterator<C>::end(c));
    test_iterator_operations(get_const_reverse_iterator<C>::begin(c), get_const_reverse_iterator<C>::end(c));
    //Make sure dangeous conversions are not possible
-   BOOST_STATIC_ASSERT((!boost::container::container_detail::is_convertible<const_iterator, iterator>::value));
-   BOOST_STATIC_ASSERT((!boost::container::container_detail::is_convertible<const_reverse_iterator, reverse_iterator>::value));
+   BOOST_STATIC_ASSERT((!boost::intrusive::detail::is_convertible<const_iterator, iterator>::value));
+   BOOST_STATIC_ASSERT((!boost::intrusive::detail::is_convertible<const_reverse_iterator, reverse_iterator>::value));
    //Test iterator conversions
    {  
       const_iterator ci;
@@ -258,10 +258,11 @@ template<class C, class I>
 void test_iterator_random_functions(C const &c, I const b, I const e)
 {
    typedef typename C::size_type size_type;
+   typedef typename C::difference_type difference_type;
    {
       I it = b;
-      for(size_type i = 0, m = c.size(); i != m; ++i, ++it){
-         BOOST_TEST(i == size_type(it - b));
+      for(difference_type i = 0, m = difference_type(c.size()); i != m; ++i, ++it){
+         BOOST_TEST(i == it - b);
          BOOST_TEST(b[i] == *it);
          BOOST_TEST(&b[i] == &*it);
          BOOST_TEST((b + i) == it);
@@ -318,7 +319,7 @@ void test_iterator_forward(C &c)
    typedef iterator_traits<reverse_iterator>         rnit_traits;
    typedef iterator_traits<const_reverse_iterator>   crit_traits;
 
-   using boost::container::container_detail::is_same;
+   using boost::intrusive::detail::is_same;
    //iterator_category
    BOOST_STATIC_ASSERT((is_same<std::forward_iterator_tag, typename nit_traits::iterator_category>::value));
    BOOST_STATIC_ASSERT((is_same<std::forward_iterator_tag, typename cit_traits::iterator_category>::value));
@@ -340,7 +341,7 @@ void test_iterator_bidirectional(C &c)
    typedef iterator_traits<reverse_iterator>         rnit_traits;
    typedef iterator_traits<const_reverse_iterator>   crit_traits;
 
-   using boost::container::container_detail::is_same;
+   using boost::intrusive::detail::is_same;
    //iterator_category
    BOOST_STATIC_ASSERT((is_same<std::bidirectional_iterator_tag, typename nit_traits::iterator_category>::value));
    BOOST_STATIC_ASSERT((is_same<std::bidirectional_iterator_tag, typename cit_traits::iterator_category>::value));
@@ -362,7 +363,7 @@ void test_iterator_random(C &c)
    typedef iterator_traits<reverse_iterator>         rnit_traits;
    typedef iterator_traits<const_reverse_iterator>   crit_traits;
 
-   using boost::container::container_detail::is_same;
+   using boost::intrusive::detail::is_same;
    //iterator_category
    BOOST_STATIC_ASSERT((is_same<std::random_access_iterator_tag, typename nit_traits::iterator_category>::value));
    BOOST_STATIC_ASSERT((is_same<std::random_access_iterator_tag, typename cit_traits::iterator_category>::value));

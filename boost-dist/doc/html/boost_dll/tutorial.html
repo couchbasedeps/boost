@@ -1,14 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Tutorial</title>
 <link rel="stylesheet" href="../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
-<link rel="up" href="../boost_dll.html" title="Chapter&#160;13.&#160;Boost.DLL">
+<link rel="up" href="../boost_dll.html" title="Chapter 12. Boost.DLL">
 <link rel="prev" href="getting_started.html" title="Getting started">
 <link rel="next" href="mangled_import.html" title="Mangled Import">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -60,9 +61,10 @@
       </p>
 <p>
 </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span>
 
-<span class="keyword">class</span> <span class="identifier">my_plugin_api</span> <span class="special">{</span>
+<span class="keyword">class</span> <span class="identifier">BOOST_SYMBOL_VISIBLE</span> <span class="identifier">my_plugin_api</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
    <span class="keyword">virtual</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">name</span><span class="special">()</span> <span class="keyword">const</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
    <span class="keyword">virtual</span> <span class="keyword">float</span> <span class="identifier">calculate</span><span class="special">(</span><span class="keyword">float</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">float</span> <span class="identifier">y</span><span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
@@ -113,7 +115,7 @@
 <p>
       </p>
 <p>
-        Simple application that loads plugin using the <code class="computeroutput"><a class="link" href="../boost/dll/import.html" title="Function import">boost::dll::import</a></code>
+        Simple application that loads plugin using the <code class="computeroutput">boost::dll::import</code>
         and <code class="computeroutput"><a class="link" href="../boost/dll/load_mode/type.html" title="Type type">append_decorations</a></code>:
       </p>
 <p>
@@ -126,11 +128,11 @@
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span> <span class="special">{</span>
 
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">lib_path</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">]);</span>          <span class="comment">// argv[1] contains path to directory with our plugin library</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">lib_path</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">]);</span>             <span class="comment">// argv[1] contains path to directory with our plugin library</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">my_plugin_api</span><span class="special">&gt;</span> <span class="identifier">plugin</span><span class="special">;</span>            <span class="comment">// variable to hold a pointer to plugin variable</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Loading the plugin"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
-    <span class="identifier">plugin</span> <span class="special">=</span> <span class="identifier">dll</span><span class="special">::</span><span class="identifier">import</span><span class="special">&lt;</span><span class="identifier">my_plugin_api</span><span class="special">&gt;(</span>          <span class="comment">// type of imported symbol is located between `&lt;` and `&gt;`</span>
+    <span class="identifier">plugin</span> <span class="special">=</span> <span class="identifier">dll</span><span class="special">::</span><span class="identifier">import_symbol</span><span class="special">&lt;</span><span class="identifier">my_plugin_api</span><span class="special">&gt;(</span>         <span class="comment">// type of imported symbol is located between `&lt;` and `&gt;`</span>
         <span class="identifier">lib_path</span> <span class="special">/</span> <span class="string">"my_plugin_sum"</span><span class="special">,</span>                     <span class="comment">// path to the library and library name</span>
         <span class="string">"plugin"</span><span class="special">,</span>                                       <span class="comment">// name of the symbol to import</span>
         <span class="identifier">dll</span><span class="special">::</span><span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">append_decorations</span>              <span class="comment">// makes `libmy_plugin_sum.so` or `my_plugin_sum.dll` from `my_plugin_sum`</span>
@@ -231,7 +233,7 @@ Destructing my_plugin_sum ;o)
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span> <span class="special">{</span>
 
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">shared_library_path</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">]);</span>               <span class="comment">// argv[1] contains path to directory with our plugin library</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">shared_library_path</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">]);</span>                  <span class="comment">// argv[1] contains path to directory with our plugin library</span>
     <span class="identifier">shared_library_path</span> <span class="special">/=</span> <span class="string">"my_plugin_aggregator"</span><span class="special">;</span>
     <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">my_plugin_api</span><span class="special">&gt;</span> <span class="special">(</span><span class="identifier">pluginapi_create_t</span><span class="special">)();</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="identifier">pluginapi_create_t</span><span class="special">&gt;</span> <span class="identifier">creator</span><span class="special">;</span>
@@ -308,7 +310,7 @@ Plugin Name:  aggregator
 
 <span class="keyword">namespace</span> <span class="identifier">dll</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">;</span>
 
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">search_for_symbols</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;&amp;</span> <span class="identifier">plugins</span><span class="special">)</span> <span class="special">{</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">search_for_symbols</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;&amp;</span> <span class="identifier">plugins</span><span class="special">)</span> <span class="special">{</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">plugins_found</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
 
     <span class="keyword">for</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="identifier">plugins</span><span class="special">.</span><span class="identifier">size</span><span class="special">();</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span> <span class="special">{</span>
@@ -538,7 +540,7 @@ Destructing my_plugin_static
     <span class="comment">// Name =&gt; plugin</span>
     <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">container</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="identifier">dll</span><span class="special">::</span><span class="identifier">shared_library</span><span class="special">&gt;</span> <span class="identifier">plugins_t</span><span class="special">;</span>
 
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span>         <span class="identifier">plugins_directory_</span><span class="special">;</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span>            <span class="identifier">plugins_directory_</span><span class="special">;</span>
     <span class="identifier">plugins_t</span>                       <span class="identifier">plugins_</span><span class="special">;</span>
 
     <span class="comment">// loads all plugins in plugins_directory_</span>
@@ -549,7 +551,7 @@ Destructing my_plugin_static
     <span class="keyword">void</span> <span class="identifier">insert_plugin</span><span class="special">(</span><span class="identifier">BOOST_RV_REF</span><span class="special">(</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">shared_library</span><span class="special">)</span> <span class="identifier">lib</span><span class="special">);</span>
 
 <span class="keyword">public</span><span class="special">:</span>
-    <span class="identifier">plugins_collector</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span><span class="special">&amp;</span> <span class="identifier">plugins_directory</span><span class="special">)</span>
+    <span class="identifier">plugins_collector</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span><span class="special">&amp;</span> <span class="identifier">plugins_directory</span><span class="special">)</span>
         <span class="special">:</span> <span class="identifier">plugins_directory_</span><span class="special">(</span><span class="identifier">plugins_directory</span><span class="special">)</span>
     <span class="special">{</span>
         <span class="identifier">load_all</span><span class="special">();</span>
@@ -558,7 +560,7 @@ Destructing my_plugin_static
     <span class="keyword">void</span> <span class="identifier">print_plugins</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">count</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-    <span class="comment">// ...   </span>
+    <span class="comment">// ...</span>
 <span class="special">};</span>
 </pre>
 <p>
@@ -719,7 +721,7 @@ Destructing my_plugin_sum ;o)
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span> <span class="special">{</span>
     <span class="comment">// argv[1] contains full path to our plugin library</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">shared_library_path</span> <span class="special">=</span>  <span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">];</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">shared_library_path</span> <span class="special">=</span>  <span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">];</span>
 
     <span class="comment">// loading library and getting a function from it</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">callback_t</span><span class="special">&amp;)&gt;</span> <span class="identifier">on_unload</span>
@@ -821,7 +823,7 @@ After library unload.
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">dll</span><span class="special">/</span><span class="identifier">library_info</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 
-<span class="keyword">void</span> <span class="identifier">load_and_execute</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">libraries</span><span class="special">[],</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">libs_count</span><span class="special">)</span> <span class="special">{</span>
+<span class="keyword">void</span> <span class="identifier">load_and_execute</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">libraries</span><span class="special">[],</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">libs_count</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">username</span> <span class="special">=</span> <span class="string">"User"</span><span class="special">;</span>
 
     <span class="keyword">for</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="identifier">libs_count</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span> <span class="special">{</span>
@@ -889,7 +891,7 @@ Function 'howdy' prints:
       library reference counting</a>
 </h3></div></div></div>
 <p>
-        As noted in documentation to the <code class="computeroutput"><a class="link" href="../boost/dll/import.html" title="Function import">boost::dll::import</a></code>
+        As noted in documentation to the <code class="computeroutput">boost::dll::import</code>
         variables and functions returned from those functions hold a reference to
         the shared library. However nested objects and objects that are returned
         by <code class="computeroutput"><span class="identifier">import</span><span class="special">*</span></code>
@@ -907,13 +909,13 @@ Function 'howdy' prints:
 <p>
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="string">"../tutorial_common/my_plugin_api.hpp"</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">filesystem</span><span class="special">/</span><span class="identifier">path</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">dll</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">class</span> <span class="identifier">my_refcounting_api</span><span class="special">:</span> <span class="keyword">public</span> <span class="identifier">my_plugin_api</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
     <span class="comment">// Returns path to shared object that holds a plugin.</span>
     <span class="comment">// Must be instantiated in plugin.</span>
-    <span class="keyword">virtual</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">location</span><span class="special">()</span> <span class="keyword">const</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="keyword">virtual</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">location</span><span class="special">()</span> <span class="keyword">const</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
@@ -935,7 +937,7 @@ Function 'howdy' prints:
 <span class="keyword">class</span> <span class="identifier">my_plugin_refcounting</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">my_refcounting_api</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
     <span class="comment">// Must be instantiated in plugin</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">location</span><span class="special">()</span> <span class="keyword">const</span> <span class="special">{</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">location</span><span class="special">()</span> <span class="keyword">const</span> <span class="special">{</span>
         <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">this_line_location</span><span class="special">();</span> <span class="comment">// location of this plugin</span>
     <span class="special">}</span>
 
@@ -980,7 +982,7 @@ Function 'howdy' prints:
 
 <span class="keyword">inline</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">my_refcounting_api</span><span class="special">&gt;</span> <span class="identifier">bind</span><span class="special">(</span><span class="identifier">my_refcounting_api</span><span class="special">*</span> <span class="identifier">plugin</span><span class="special">)</span> <span class="special">{</span>
     <span class="comment">// getting location of the shared library that holds the plugin</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">location</span> <span class="special">=</span> <span class="identifier">plugin</span><span class="special">-&gt;</span><span class="identifier">location</span><span class="special">();</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">location</span> <span class="special">=</span> <span class="identifier">plugin</span><span class="special">-&gt;</span><span class="identifier">location</span><span class="special">();</span>
 
     <span class="comment">// `make_shared` is an efficient way to create a shared pointer</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">shared_library</span><span class="special">&gt;</span> <span class="identifier">lib</span>
@@ -1028,7 +1030,7 @@ Function 'howdy' prints:
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">dll</span><span class="special">/</span><span class="identifier">import</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">function</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">my_refcounting_api</span><span class="special">&gt;</span> <span class="identifier">get_plugin</span><span class="special">(</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">path</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">func_name</span><span class="special">)</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">path</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">func_name</span><span class="special">)</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="identifier">my_refcounting_api</span><span class="special">*(</span><span class="identifier">func_t</span><span class="special">)();</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="identifier">func_t</span><span class="special">&gt;</span> <span class="identifier">creator</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">import_alias</span><span class="special">&lt;</span><span class="identifier">func_t</span><span class="special">&gt;(</span>
@@ -1084,13 +1086,13 @@ Function 'howdy' prints:
 <td>
                 <p>
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<pre class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="string">"refcounting_api.hpp"</span>
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span> <span class="special">{</span>
 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">my_refcounting_api</span><span class="special">&gt;</span> <span class="identifier">plugin</span> <span class="special">=</span> <span class="identifier">get_plugin</span><span class="special">(</span>
-        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">])</span> <span class="special">/</span> <span class="string">"refcounting_plugin"</span><span class="special">,</span>
+        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">fs</span><span class="special">::</span><span class="identifier">path</span><span class="special">(</span><span class="identifier">argv</span><span class="special">[</span><span class="number">1</span><span class="special">])</span> <span class="special">/</span> <span class="string">"refcounting_plugin"</span><span class="special">,</span>
         <span class="string">"create_refc_plugin"</span>
     <span class="special">);</span>
 
@@ -1105,7 +1107,7 @@ Function 'howdy' prints:
 <td>
                 <p>
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">dll</span><span class="special">/</span><span class="identifier">runtime_symbol_info</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// program_location()</span>
+<pre class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">dll</span><span class="special">/</span><span class="identifier">runtime_symbol_info</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// program_location()</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="string">"refcounting_plugin.hpp"</span>
 
@@ -1131,11 +1133,11 @@ Function 'howdy' prints:
                 </p>
               </td>
 <td>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">Plugin name: refcounting,
+<pre class="table-programlisting">Plugin name: refcounting,
 location: "/libs/dll/librefcounting_plugin.so"</pre>
               </td>
 <td>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">Plugin name: refcounting,
+<pre class="table-programlisting">Plugin name: refcounting,
 location: "/tutorial8_static"</pre>
               </td>
 </tr>
@@ -1173,7 +1175,7 @@ location: "/tutorial8_static"</pre>
 <p>
         This a trivial example, but it has one tricky place. When you are importing
         a C function by <span class="bold"><strong>it's name</strong></span> you must use
-        <code class="computeroutput"><a class="link" href="../boost/dll/import.html" title="Function import">boost::dll::import</a></code>,
+        <code class="computeroutput">boost::dll::import</code>,
         not <code class="computeroutput"><a class="link" href="../boost/dll/import_alias.html" title="Function import_alias">boost::dll::import_alias</a></code>:
       </p>
 <p>
@@ -1191,7 +1193,7 @@ location: "/tutorial8_static"</pre>
 
     <span class="comment">// OPTION #0, requires C++11 compatible compiler that understands GetStdHandle_t signature.</span>
 
-    <span class="keyword">auto</span> <span class="identifier">get_std_handle</span> <span class="special">=</span> <span class="identifier">dll</span><span class="special">::</span><span class="identifier">import</span><span class="special">&lt;</span><span class="identifier">GetStdHandle_t</span><span class="special">&gt;(</span>
+    <span class="keyword">auto</span> <span class="identifier">get_std_handle</span> <span class="special">=</span> <span class="identifier">dll</span><span class="special">::</span><span class="identifier">import_symbol</span><span class="special">&lt;</span><span class="identifier">GetStdHandle_t</span><span class="special">&gt;(</span>
         <span class="string">"Kernel32.dll"</span><span class="special">,</span>
         <span class="string">"GetStdHandle"</span><span class="special">,</span>
         <span class="identifier">boost</span><span class="special">::</span><span class="identifier">dll</span><span class="special">::</span><span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">search_system_folders</span>
@@ -1228,14 +1230,11 @@ location: "/tutorial8_static"</pre>
       </p>
 </div>
 </div>
-<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Renato Tegon Forti, Antony Polukhin<br>Copyright &#169; 2015 Antony Polukhin<br>Copyright &#169; 2016 Antony Polukhin, Klemens Morgenstern<p>
+<div class="copyright-footer">Copyright © 2014 Renato Tegon Forti, Antony Polukhin<br>Copyright © 2015 Antony Polukhin<br>Copyright © 2016 Antony Polukhin, Klemens Morgenstern<br>Copyright © 2017-2023 Antony Polukhin<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       </p>
-</div></td>
-</tr></table>
+</div>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="getting_started.html"><img src="../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../boost_dll.html"><img src="../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="mangled_import.html"><img src="../../../doc/src/images/next.png" alt="Next"></a>

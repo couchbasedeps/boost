@@ -1,13 +1,14 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>unordered_set_of Reference</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Bimap">
+<link rel="home" href="../../index.html" title="Chapter 1. Boost.Bimap">
 <link rel="up" href="../reference.html" title="Reference">
 <link rel="prev" href="set_of_reference.html" title="set_of Reference">
 <link rel="next" href="list_of_reference.html" title="list_of Reference">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -456,10 +457,10 @@
               </li>
 </ul></div>
 <p>
-            <code class="computeroutput"><span class="identifier">Hash</span></code> is a <a href="http://www.sgi.com/tech/stl/UnaryFunction.html" target="_top">Unary
+            <code class="computeroutput"><span class="identifier">Hash</span></code> is a <a href="https://www.boost.org/sgi/stl/UnaryFunction.html" target="_top">Unary
             Function</a> taking a single argument of type <code class="computeroutput"><span class="identifier">key_type</span></code>
             and returning a value of type <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span></code>
-            in the range <code class="computeroutput"><span class="special">[</span><span class="number">0</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">())</span></code>. Pred is a <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html" target="_top">Binary
+            in the range <code class="computeroutput"><span class="special">[</span><span class="number">0</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">())</span></code>. Pred is a <a href="https://www.boost.org/sgi/stl/BinaryPredicate.html" target="_top">Binary
             Predicate</a> inducing an equivalence relation on elements of <code class="computeroutput"><span class="identifier">key_type</span></code>. It is required that the
             <code class="computeroutput"><span class="identifier">Hash</span></code> object return the
             same value for keys equivalent under <code class="computeroutput"><span class="identifier">Pred</span></code>.
@@ -476,7 +477,7 @@
 <span class="identifier">const_local_iterator</span>
 </pre>
 <div class="blockquote"><blockquote class="blockquote"><p>
-              These types are models of <a href="http://www.sgi.com/tech/stl/ForwardIterator.html" target="_top">Forward
+              These types are models of <a href="https://www.boost.org/sgi/stl/ForwardIterator.html" target="_top">Forward
               Iterator</a>.
             </p></blockquote></div>
 </div>
@@ -585,7 +586,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
                 <span class="bold"><strong>Requires: </strong></span> <code class="computeroutput"><span class="identifier">InputIterator</span></code>
-                is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html" target="_top">Input
+                is a model of <a href="https://www.boost.org/sgi/stl/InputIterator.html" target="_top">Input
                 Iterator</a> over elements of type <code class="computeroutput"><span class="identifier">value_type</span></code>.
                 <code class="computeroutput"><span class="identifier">first</span></code> and <code class="computeroutput"><span class="identifier">last</span></code> are not iterators into any
                 views of the <code class="computeroutput"><span class="identifier">bimap</span></code>
@@ -815,7 +816,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
                 <span class="bold"><strong>Requires: </strong></span> <code class="computeroutput"><span class="identifier">KeyModifier</span></code>
-                is a model of <a href="http://www.sgi.com/tech/stl/UnaryFunction.html" target="_top">Unary
+                is a model of <a href="https://www.boost.org/sgi/stl/UnaryFunction.html" target="_top">Unary
                 Function</a> accepting arguments of type: <code class="computeroutput"><span class="identifier">key_type</span><span class="special">&amp;</span></code>; <code class="computeroutput"><span class="identifier">position</span></code>
                 is a valid dereferenceable iterator of the view.
               </li>
@@ -863,7 +864,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
                 <span class="bold"><strong>Requires: </strong></span> <code class="computeroutput"><span class="identifier">DataModifier</span></code>
-                is a model of <a href="http://www.sgi.com/tech/stl/UnaryFunction.html" target="_top">Unary
+                is a model of <a href="https://www.boost.org/sgi/stl/UnaryFunction.html" target="_top">Unary
                 Function</a> accepting arguments of type: <code class="computeroutput"><span class="identifier">mapped_type</span><span class="special">&amp;</span></code>; <code class="computeroutput"><span class="identifier">position</span></code>
                 is a valid dereferenceable iterator of the view.
               </li>
@@ -1013,7 +1014,7 @@
 <p>
             The symmetry of bimap imposes some constraints on <code class="computeroutput"><span class="keyword">operator</span><span class="special">[]</span></code> and the non constant version of at()
             that are not found in <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">maps</span></code>.
-            Tey are only provided if the other collection type is mutable (<code class="computeroutput"><span class="identifier">list_of</span></code>, <code class="computeroutput"><span class="identifier">vector_of</span></code>
+            They are only provided if the other collection type is mutable (<code class="computeroutput"><span class="identifier">list_of</span></code>, <code class="computeroutput"><span class="identifier">vector_of</span></code>
             and <code class="computeroutput"><span class="identifier">unconstrained_set_of</span></code>).
           </p>
 <a name="reference_unordered_set_of_operator_bracket_key"></a><pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">CompatibleKey</span> <span class="special">&gt;</span>
@@ -1123,7 +1124,7 @@
             to <code class="computeroutput"><span class="identifier">unordered_</span><span class="special">[</span><span class="identifier">multi</span><span class="special">]</span><span class="identifier">set_of</span></code> views with respect to serialization
             of their embedding containers, we use the concepts defined in the <code class="computeroutput"><span class="identifier">bimap</span></code> serialization section.
           </p>
-<div class="sidebar">
+<div class="blurb">
 <div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> saving of a <code class="computeroutput"><span class="identifier">bimap</span></code> b to an output archive (XML archive)
@@ -1134,7 +1135,7 @@
                 <span class="bold"><strong>Requires:</strong></span> No additional requirements
                 to those imposed by the container.
               </li></ul></div>
-<div class="sidebar">
+<div class="blurb">
 <div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> loading of a <code class="computeroutput"><span class="identifier">bimap</span></code> b' from an input archive (XML
@@ -1156,7 +1157,7 @@
                 same order.
               </li>
 </ul></div>
-<div class="sidebar">
+<div class="blurb">
 <div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> saving of an <code class="computeroutput"><span class="identifier">iterator</span></code> or <code class="computeroutput"><span class="identifier">const_iterator</span></code>
@@ -1170,7 +1171,7 @@
                 of the view. The associated <code class="computeroutput"><span class="identifier">bimap</span></code>
                 has been previously saved.
               </li></ul></div>
-<div class="sidebar">
+<div class="blurb">
 <div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> loading of an iterator or
@@ -1192,7 +1193,7 @@
                 an <code class="computeroutput"><span class="identifier">iterator</span></code>, or viceversa.
               </li>
 </ul></div>
-<div class="sidebar">
+<div class="blurb">
 <div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> saving of a local_iterator
@@ -1203,7 +1204,7 @@
                 <span class="bold"><strong>Requires: </strong></span> <code class="computeroutput"><span class="identifier">it</span></code>
                 is a valid local iterator of the view. The associated <code class="computeroutput"><span class="identifier">bimap</span></code> has been previously saved.
               </li></ul></div>
-<div class="sidebar">
+<div class="blurb">
 <div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div>
 <p>
             <span class="bold"><strong>Operation:</strong></span> loading of a <code class="computeroutput"><span class="identifier">local_iterator</span></code> or <code class="computeroutput"><span class="identifier">const_local_iterator</span></code>
@@ -1235,14 +1236,11 @@
 </div>
 </div>
 </div>
-<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2012 Matias Capeletto<p>
+<div class="copyright-footer">Copyright © 2006-2012 Matias Capeletto<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
-</div></td>
-</tr></table>
+</div>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="set_of_reference.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../reference.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="list_of_reference.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>

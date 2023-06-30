@@ -10,13 +10,14 @@
 #define BOOST_USE_WINDOWS_H
 
 #include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
+#include <boost/process/filesystem.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/algorithm/transform.hpp>
 #include <boost/range/algorithm_ext/push_back.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/process/environment.hpp>
+#include <boost/process/handles.hpp>
 #include <vector>
 #include <string>
 #include <iterator>
@@ -28,7 +29,7 @@
 #   include <boost/iostreams/stream.hpp>
 #   include <unistd.h>
 #elif defined(BOOST_WINDOWS_API)
-#   include <Windows.h>
+#   include <windows.h>
 #endif
 
 
@@ -51,11 +52,13 @@ int main(int argc, char *argv[])
         ("is-nul-stdout", bool_switch())
         ("is-nul-stderr", bool_switch())
         ("loop", bool_switch())
+        ("abort", bool_switch())
         ("prefix", value<std::string>())
         ("prefix-once", value<std::string>())
         ("pwd", bool_switch())
         ("query", value<std::string>())
         ("stdin-to-stdout", bool_switch())
+        ("has-handle", value<std::uintptr_t>())
 #if defined(BOOST_POSIX_API)
         ("posix-echo-one", value<std::vector<std::string> >()->multitoken())
         ("posix-echo-two", value<std::vector<std::string> >()->multitoken());
@@ -147,6 +150,10 @@ int main(int argc, char *argv[])
     {
         while (true);
     }
+    else if (vm["abort"].as<bool>())
+    {
+        std::abort();
+    }
     else if (vm.count("prefix"))
     {
         std::string line;
@@ -163,7 +170,7 @@ int main(int argc, char *argv[])
     }
     else if (vm["pwd"].as<bool>())
     {
-        std::cout << boost::filesystem::current_path().string() << std::endl;
+        std::cout << boost::process::filesystem::current_path().string() << std::endl;
     }
     else if (vm.count("query"))
     {
@@ -218,5 +225,15 @@ int main(int argc, char *argv[])
         std::cout << si.dwFlags << std::endl;
     }
 #endif
+    else if (vm.count("has-handle"))
+    {
+#if defined(BOOST_WINDOWS_API)
+        const auto handle = reinterpret_cast<boost::this_process::native_handle_type>(vm["has-handle"].as<std::uintptr_t>());
+#else
+        const auto handle = static_cast<boost::this_process::native_handle_type>(vm["has-handle"].as<std::uintptr_t>());
+#endif
+        auto all_handles = boost::this_process::get_handles();
+        return (std::find(all_handles.begin(), all_handles.end(), handle) != all_handles.end()) ? EXIT_SUCCESS : EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
 }

@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Unit Test Framework API reference</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
@@ -8,6 +8,7 @@
 <link rel="up" href="../index.html" title="Boost.Test">
 <link rel="prev" href="acknowledgements.html" title="Acknowledgements">
 <link rel="next" href="utf_reference/test_org_reference.html" title="Tests declaration and organization">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -31,7 +32,7 @@
 <dt><span class="section"><a href="utf_reference/test_org_reference.html">Tests declaration
       and organization</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_case.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_CASE</span></code></a></span></dt>
+<dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_case.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_CASE</span></code> and <code class="computeroutput"><span class="identifier">BOOST_TEST_CASE_NAME</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_auto_test_case.html"><code class="computeroutput"><span class="identifier">BOOST_AUTO_TEST_CASE</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_case_auto_template.html"><code class="computeroutput"><span class="identifier">BOOST_AUTO_TEST_CASE_TEMPLATE</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_case_template.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_CASE_TEMPLATE</span></code></a></span></dt>
@@ -45,6 +46,7 @@
 <dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_case_fixture.html"><code class="computeroutput"><span class="identifier">BOOST_FIXTURE_TEST_CASE</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_suite_fixture.html"><code class="computeroutput"><span class="identifier">BOOST_FIXTURE_TEST_SUITE</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_global_fixture.html"><code class="computeroutput"><span class="identifier">BOOST_GLOBAL_FIXTURE</span></code></a></span></dt>
+<dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_global_fixture.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_GLOBAL_FIXTURE</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/test_org_reference/test_org_boost_test_decorator.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_DECORATOR</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/test_org_reference/decorator_depends_on.html">depends_on
         (decorator)</a></span></dt>
@@ -103,6 +105,7 @@
 <dt><span class="section"><a href="utf_reference/testout_reference/test_output_macro_message.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_MESSAGE</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/testout_reference/test_output_macro_info.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_INFO</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/testout_reference/test_output_macro_context.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_CONTEXT</span></code></a></span></dt>
+<dt><span class="section"><a href="utf_reference/testout_reference/test_output_macro_context_sticky.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_INFO_SCOPE</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/testout_reference/test_output_macro_disable_type.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_DONT_PRINT_LOG_VALUE</span></code></a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="utf_reference/rt_param_reference.html">Runtime
@@ -144,6 +147,7 @@
 <dt><span class="section"><a href="utf_reference/link_references/link_boost_test_no_lib.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_NO_LIB</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/link_references/link_boost_test_dyn_link.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_DYN_LINK</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/link_references/link_boost_test_no_main.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_NO_MAIN</span></code></a></span></dt>
+<dt><span class="section"><a href="utf_reference/link_references/link_boost_test_global_configuration.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_GLOBAL_CONFIGURATION</span></code></a></span></dt>
 <dt><span class="section"><a href="utf_reference/link_references/config_disable_alt_stack.html"><code class="computeroutput"><span class="identifier">BOOST_TEST_DISABLE_ALT_STACK</span></code></a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="reference.html">Reference</a></span></dt>
@@ -154,6 +158,8 @@
 <dt><span class="section"><a href="../header/boost/test/data/monomorphic/array_hpp.html">Header &lt;boost/test/data/monomorphic/array.hpp&gt;</a></span></dt>
 <dd><dl></dl></dd>
 <dt><span class="section"><a href="../header/boost/test/data/monomorphic/collection_hpp.html">Header &lt;boost/test/data/monomorphic/collection.hpp&gt;</a></span></dt>
+<dd><dl></dl></dd>
+<dt><span class="section"><a href="../header/boost/test/data/monomorphic/delayed_hpp.html">Header &lt;boost/test/data/monomorphic/delayed.hpp&gt;</a></span></dt>
 <dd><dl></dl></dd>
 <dt><span class="section"><a href="../header/boost/test/data/monomorphic/fwd_hpp.html">Header &lt;boost/test/data/monomorphic/fwd.hpp&gt;</a></span></dt>
 <dd><dl></dl></dd>
@@ -223,7 +229,6 @@
 <dt><span class="section"><a href="../header/boost/test/tree/test_unit_hpp.html">Header &lt;boost/test/tree/test_unit.hpp&gt;</a></span></dt>
 <dd><dl></dl></dd>
 <dt><span class="section"><a href="../header/boost/test/unit_test_hpp.html">Header &lt;boost/test/unit_test.hpp&gt;</a></span></dt>
-<dd><dl></dl></dd>
 <dt><span class="section"><a href="../header/boost/test/unit_test_log_hpp.html">Header &lt;boost/test/unit_test_log.hpp&gt;</a></span></dt>
 <dd><dl></dl></dd>
 <dt><span class="section"><a href="../header/boost/test/unit_test_log_formatter_hpp.html">Header &lt;boost/test/unit_test_log_formatter.hpp&gt;</a></span></dt>
@@ -239,14 +244,11 @@
 </dl></dd>
 </dl></div>
 </div>
-<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2016 Boost.Test contributors<p>
+<div class="copyright-footer">Copyright © 2001-2022 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
-</div></td>
-</tr></table>
+</div>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="acknowledgements.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="utf_reference/test_org_reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>

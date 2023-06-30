@@ -46,9 +46,12 @@ endif()
 add_definitions(-DBOOST_COMPUTE_DEBUG_KERNEL_COMPILATION)
 
 # enable code coverage generation (only with GCC for now)
-if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   add_definitions(-fprofile-arcs -ftest-coverage)
 endif()
+
+# add path to test data dir
+add_definitions(-DBOOST_COMPUTE_TEST_DATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/data")
 
 function(add_compute_test TEST_NAME TEST_SOURCE)
   get_filename_component(TEST_TARGET ${TEST_SOURCE} NAME_WE)
@@ -59,7 +62,7 @@ function(add_compute_test TEST_NAME TEST_SOURCE)
   )
 
   # link with coverage library
-  if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     target_link_libraries(${TEST_TARGET} -fprofile-arcs -ftest-coverage)
   endif()
 

@@ -17,11 +17,14 @@
 
 #include <boost/array.hpp>
 #include <boost/assert.hpp>
-#include <boost/test/unit_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 #include <boost/utility.hpp>
 
 #include <boost/context/detail/config.hpp>
 #include <boost/context/detail/fcontext.hpp>
+
+#define BOOST_CHECK(x) BOOST_TEST(x)
+#define BOOST_CHECK_EQUAL(a, b) BOOST_TEST_EQ(a, b)
 
 template< std::size_t Max, std::size_t Default, std::size_t Min >
 class simple_stack_allocator
@@ -175,17 +178,17 @@ void f13( ctx::transfer_t t) {
 void f14( ctx::transfer_t t) {
     {
         const char *fmt = "sqrt(2) = %f";
-        char buf[15];
+        char buf[19];
         snprintf( buf, sizeof( buf), fmt, std::sqrt( 2) );
         BOOST_CHECK( 0 < sizeof( buf) );
-        BOOST_CHECK_EQUAL( std::string("sqrt(2) = 1.41"), std::string( buf) );
+        BOOST_CHECK_EQUAL( std::string("sqrt(2) = 1.41"), std::string( buf, 14) );
     }
     {
         std::uint64_t n = 0xbcdef1234567890;
         const char *fmt = "0x%016llX";
         char buf[100];
         snprintf( buf, sizeof( buf), fmt, n);
-        BOOST_CHECK_EQUAL( std::string("0x0BCDEF1234567890"), std::string( buf) );
+        BOOST_CHECK_EQUAL( std::string("0x0BCDEF1234567890"), std::string( buf, 18) );
     }
     ctx::jump_fcontext( t.fctx, 0);
 }
@@ -332,21 +335,20 @@ void test_snprintf() {
 	alloc.deallocate( sp, stack_allocator::default_stacksize() );
 }
 
-boost::unit_test::test_suite * init_unit_test_suite( int, char* []) {
-    boost::unit_test::test_suite * test =
-        BOOST_TEST_SUITE("Boost.Context: context test suite");
-    test->add( BOOST_TEST_CASE( & test_setup) );
-    test->add( BOOST_TEST_CASE( & test_start) );
-    test->add( BOOST_TEST_CASE( & test_jump) );
-    test->add( BOOST_TEST_CASE( & test_result) );
-    test->add( BOOST_TEST_CASE( & test_arg) );
-    test->add( BOOST_TEST_CASE( & test_transfer) );
-    test->add( BOOST_TEST_CASE( & test_exception) );
-    test->add( BOOST_TEST_CASE( & test_fp) );
-    test->add( BOOST_TEST_CASE( & test_stacked) );
-    test->add( BOOST_TEST_CASE( & test_ontop) );
-    test->add( BOOST_TEST_CASE( & test_sscanf) );
-    test->add( BOOST_TEST_CASE( & test_snprintf) );
+int main()
+{
+    test_setup();
+    test_start();
+    test_jump();
+    test_result();
+    test_arg();
+    test_transfer();
+    test_exception();
+    test_fp();
+    test_stacked();
+    test_ontop();
+    test_sscanf();
+    test_snprintf();
 
-    return test;
+    return boost::report_errors();
 }

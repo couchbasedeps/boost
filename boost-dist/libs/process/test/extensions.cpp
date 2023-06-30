@@ -12,7 +12,6 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/process/error.hpp>
 #include <system_error>
-#include <boost/bind.hpp>
 #include <boost/ref.hpp>
 #include <boost/process/child.hpp>
 #include <boost/process/extend.hpp>
@@ -29,7 +28,6 @@ struct run_exe
     {
         e.exe = exe.c_str();
     }
-
 };
 
 struct  set_on_error
@@ -74,13 +72,11 @@ struct overload_handler : ex::handler
     void on_setup(ex::windows_executor<Char, Sequence>& exec) const
     {
         st = "windows";
-        const char* env = exec.env;
     }
-    template <class ...Args>
-    void on_setup(ex::posix_executor<Args...>& exec) const
+    template <class Sequence>
+    void on_setup(ex::posix_executor<Sequence>& exec) const
     {
         st = "posix";
-        char** env = exec.env;
     }
 };
 

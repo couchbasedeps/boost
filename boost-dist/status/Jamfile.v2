@@ -1,5 +1,5 @@
 # Copyright 2002. Dave Abrahams
-# Copyright 2016. Rene Rivera
+# Copyright 2016-2018. Rene Rivera
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
@@ -14,6 +14,9 @@
 #
 # --check-libs-only
 #   Only runs the library conformance tests.
+#
+# --no-check-libs
+#   Do not run the library conformance tests.
 #
 # --limit-tests, or --include-tests
 #   Only runs the tests for whom the name matches the regex.
@@ -58,6 +61,7 @@ import feature ;
 import numbers ;
 
 local check-libs-only = [ MATCH "^--(check-libs-only)" : [ modules.peek : ARGV ] ] ;
+local no-check-libs = [ MATCH "^--(no-check-libs)$" : [ modules.peek : ARGV ] ] ;
 local check-libs-only-targets = ;
 local libraries = ;
 
@@ -106,10 +110,13 @@ local rule run-tests ( root : tests * )
             t = [ CALC $(t) + 2 ] ;
             f = [ CALC $(f) + 2 ] ;
         }
-        use-project /boost/$(test) : ../$(root)/$(test) ;
         if $(include-test) = y
         {
-            if $(root) = libs && ( ! ( $(library) in $(libraries) ) )
+            if [ path.exists ../$(root)/$(test) ]
+            {
+                use-project /boost/$(test) : ../$(root)/$(test) ;
+            }
+            if $(root) = libs && ! $(no-check-libs) && ( ! ( $(library) in $(libraries) ) )
             {
                 libraries += $(library) ;
                 local test_module = [ project.find ../$(root)/$(test) : $(location) ] ;
@@ -143,6 +150,26 @@ local rule run-tests ( root : tests * )
     }
 }
 
+local rule find-targets ( target : libs * )
+{
+    local result = ;
+
+    for local lib in $(libs)
+    {
+        local path = $(lib)/test ;
+        local project = [ project.load $(path) ] ;
+        local pt = [ project.target $(project) ] ;
+        local mt = [ $(pt).main-target $(target) ] ;
+
+        if $(mt)
+        {
+            result += $(path)//$(target) ;
+        }
+    }
+
+    return $(result) ;
+}
+
 local libs-to-test = ;
 for local libdir in [ path.glob $(BOOST_ROOT) : libs/* ]
 {
@@ -163,21 +190,36 @@ for local libdir in [ path.glob $(BOOST_ROOT) : libs/* ]
         }
     }
 }
+
 libs-to-test = [ SORT $(libs-to-test) ] ;
 
 run-tests libs : $(libs-to-test)/test ;
 
-# Tests from Jamfiles in individual library test subdirectories
-# Please keep these in alphabetic order by test-suite name
-run-tests libs :
-    wave/test/build             # test-suite wave
-    ;
+# Tests from Jamfiles in tools/
+# Please keep these in alphabetical order
 
-run-tests tools :
-    bcp/test
-    ;
+local tools-to-test = ;
+for local tooldir in bcp check_build quickbook
+{
+    local jamfile = [ modules.peek project : JAMFILE ] ;
+    local jamfiles = [ path.glob [ path.join $(BOOST_ROOT) tools $(tooldir) test ] : $(jamfile) ] ;
+    if $(jamfiles)
+    {
+        tools-to-test += $(tooldir) ;
+    }
+}
+
+#ECHO "tools-to-test:" $(tools-to-test) ;
+
+run-tests tools : $(tools-to-test)/test ;
 
 if $(check-libs-only-targets)
 {
     alias check-libs-only : $(check-libs-only-targets) ;
 }
+
+alias minimal : [ find-targets minimal : ../libs/$(libs-to-test) ] ;
+explicit minimal ;
+
+alias quick : [ find-targets quick : ../libs/$(libs-to-test) ../tools/$(tools-to-test) ] ;
+explicit quick ;

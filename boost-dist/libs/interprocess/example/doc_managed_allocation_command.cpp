@@ -7,7 +7,7 @@
 // See http://www.boost.org/libs/interprocess for documentation.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include <boost/interprocess/detail/config_begin.hpp>
+
 //[doc_managed_allocation_command
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <cassert>
@@ -88,6 +88,9 @@ int main()
    //Get free memory and compare
    managed_shared_memory::size_type free_memory_after_expansion = managed_shm.get_free_memory();
    assert(free_memory_after_expansion < free_memory_after_allocation);
+   //<-
+   (void)free_memory_after_expansion;
+   //->
 
    //Write new values
    for(std::size_t i = first_received_size; i < expanded_size; ++i)  ptr[i] = i;
@@ -109,10 +112,13 @@ int main()
    //Get free memory and compare
    managed_shared_memory::size_type free_memory_after_shrinking = managed_shm.get_free_memory();
    assert(free_memory_after_shrinking > free_memory_after_expansion);
+   //<-
+   (void)free_memory_after_shrinking;
+   //->
 
    //Deallocate the buffer
    managed_shm.deallocate(ptr);
    return 0;
 }
 //]
-#include <boost/interprocess/detail/config_end.hpp>
+
